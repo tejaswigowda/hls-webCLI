@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Scripts only from this origin; the network only over https (GitHub's API, the CDNs a render is mirrored on). The ledger in the header counts what actually goes out. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; media-src blob:; connect-src https:; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>hls · webCLI</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+	<h1>hls <span>webCLI</span></h1>
+	<nav>
+		<button id="tab-library" class="tab on" type="button">Library</button>
+		<button id="tab-upload" class="tab" type="button">Upload &amp; publish</button>
+	</nav>
+	<div id="ledger" title="Every request this page makes is counted here. Preparing a video makes none."></div>
+</header>
+
+<main>
+	<section id="settings">
+		<label>GitHub token <input id="token" type="password" autocomplete="off" placeholder="only needed to publish; kept in this tab" spellcheck="false"></label>
+		<span id="who"></span>
+	</section>
+
+	<section id="library">
+		<form id="library-form">
+			<input id="repo-url" type="text" placeholder="github.com/owner/renders" spellcheck="false" autocomplete="off">
+			<button type="submit">List streams</button>
+		</form>
+		<p class="note">Lists every folder of the repository that holds a <code>master.m3u8</code>, the versions it was tagged as (<code>&lt;name&gt;/v&lt;N&gt;</code>), and what it serves now. Reads only; nothing is written.</p>
+		<div id="library-status" class="status" role="status"></div>
+		<div id="library-result"></div>
+	</section>
+
+	<section id="upload" hidden>
+		<div id="drop" tabindex="0">Drop a video here, or <label class="link">choose one<input id="video" type="file" accept="video/mp4,video/quicktime,.mp4,.mov,.m4v" hidden></label></div>
+		<div id="analysis" class="status"></div>
+		<form id="upload-form" hidden>
+			<fieldset>
+				<legend>Destination</legend>
+				<label>Repository <input id="dest-repo" type="text" placeholder="owner/renders" spellcheck="false"></label>
+				<label>Branch <input id="dest-branch" type="text" value="main" spellcheck="false"></label>
+				<label>Name <input id="dest-slug" type="text" spellcheck="false"></label>
+				<span id="plan-line" class="note"></span>
+			</fieldset>
+			<fieldset>
+				<legend>Ladder</legend>
+				<div id="rungs"></div>
+				<label id="audio-row" hidden><input id="audio-keep" type="checkbox" checked> Keep the audio (re-encoded to AAC-LC, 48&nbsp;kHz stereo)</label>
+				<label>Captions (WebVTT, optional) <input id="vtt" type="file" accept=".vtt,text/vtt"></label>
+				<label>Caption language <input id="vtt-lang" type="text" value="en" size="5"></label>
+				<label><input id="canonical" type="checkbox"> Record Strata&rsquo;s permanent address (strataeditor.dev/video/&lt;tag&gt;/). Only for the renders repository that site serves.</label>
+			</fieldset>
+			<div class="row">
+				<button id="prepare" type="submit">Prepare</button>
+				<button id="cancel" type="button" hidden>Cancel</button>
+			</div>
+		</form>
+		<progress id="progress" max="1" value="0" hidden></progress>
+		<div id="upload-status" class="status" role="status"></div>
+		<div id="review" hidden>
+			<h2>Ready</h2>
+			<div id="review-summary"></div>
+			<div id="gate"></div>
+			<details><summary id="tree-summary">Files</summary><pre id="tree"></pre></details>
+			<div class="row">
+				<button id="download" type="button">Download .zip</button>
+				<button id="publish" type="button">Publish&hellip;</button>
+			</div>
+			<div id="confirm" hidden>
+				<p id="confirm-text"></p>
+				<div class="row"><button id="confirm-yes" type="button">Send it</button><button id="confirm-no" type="button">Not now</button></div>
+			</div>
+			<div id="receipt" hidden></div>
+		</div>
+	</section>
+</main>
+
+<footer>
+	Packaging, versioning and verification are Strata&rsquo;s own modules (<code>docs/strata/</code>, see <a href="strata/VENDORED.md">VENDORED.md</a>). Video is decoded and encoded in this browser with WebCodecs; it is sent nowhere until you press Publish.
+</footer>
+<script type="module" src="app.js"></script>
+</body>
+</html>

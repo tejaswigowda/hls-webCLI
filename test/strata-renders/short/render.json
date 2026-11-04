@@ -1,0 +1,155 @@
+{
+  "version": 2,
+  "scene": {
+    "repo": "tejaswigowda/test1",
+    "file": "short.json",
+    "branch": "main",
+    "commit": "66918034235145b8240b43fb461566d7e3709a8d",
+    "hash": "sha256:41ede4fd99601721b53492100c110a3ccd829c8763e8fda0f3642b489b5a2c9c"
+  },
+  "render": {
+    "mode": "offline",
+    "determinism": {
+      "frames": false,
+      "bytes": false,
+      "reasons": {
+        "frames": [
+          "not verified: the shuffled-order test was not run (set Verify to all frames)"
+        ],
+        "bytes": [
+          "a hardware encoder was chosen: its bytes are not promised to repeat (a choice; the frames are unaffected)",
+          "the frames are not established as deterministic"
+        ]
+      },
+      "verification": null
+    },
+    "encoder": {
+      "kind": "hardware",
+      "name": "WebCodecs VideoEncoder (H.264)",
+      "version": "Google Chrome 159",
+      "settings_hash": "sha256:95b17ad03ad20b6579e31b6c628b540f267c3d62411e7a784dfd98ea7f8142a2",
+      "threads": null,
+      "config": {
+        "codec": "avc1.64002a",
+        "width": 1920,
+        "height": 1080,
+        "bitrate": 18662400,
+        "framerate": 60,
+        "avc": {
+          "format": "avc"
+        },
+        "latencyMode": "quality",
+        "hardwareAcceleration": "no-preference",
+        "keyEvery": 120
+      }
+    },
+    "renderer": "WebGLRenderer",
+    "device": "webgl2",
+    "fps": 60,
+    "frames": 3720,
+    "frame_range": [
+      0,
+      3719
+    ],
+    "duration_s": 62,
+    "width": 1920,
+    "height": 1080,
+    "seed": null,
+    "exporter": "strata-export/1.2.0",
+    "rendered_at": "2026-11-04T14:41:21.324Z",
+    "time_source_audit": {
+      "document": "guides/TIME_SOURCES.md",
+      "passed": true,
+      "confirmed": [
+        "no-clock-in-animated-quantities",
+        "no-delta-integration",
+        "no-previous-frame-reads",
+        "shell-wall-clock-loops"
+      ],
+      "live_when_present": [
+        "playback-running"
+      ]
+    }
+  },
+  "inputs": {
+    "end_card": {
+      "path": "endcard.png",
+      "sha256": "sha256:ccb8bb1f565e0e43f4fecd5fd5d29980cd10722b2167a9084b5004e89e890ece",
+      "bytes": 93462,
+      "source": "http://localhost:5503/docs/about/callcard/",
+      "stamp": "Strata v0.1.0",
+      "width": 1152,
+      "height": 2048
+    }
+  },
+  "outputs": {
+    "master": "master.m3u8",
+    "renditions": [
+      {
+        "name": "1080p60",
+        "width": 1920,
+        "height": 1080,
+        "bitrate_kbps": 3500,
+        "playlist": "1080p60/index.m3u8",
+        "segments": 11,
+        "max_segment_bytes": 3492267
+      },
+      {
+        "name": "720p60",
+        "width": 1280,
+        "height": 720,
+        "bitrate_kbps": 1800,
+        "playlist": "720p60/index.m3u8",
+        "segments": 11,
+        "max_segment_bytes": 1704864
+      },
+      {
+        "name": "480p60",
+        "width": 854,
+        "height": 480,
+        "bitrate_kbps": 900,
+        "playlist": "480p60/index.m3u8",
+        "segments": 11,
+        "max_segment_bytes": 834107
+      }
+    ],
+    "poster": "poster.jpg",
+    "captions": null,
+    "caption_tracks": [],
+    "manifest": {
+      "path": "files.sha256",
+      "algorithm": "sha256"
+    },
+    "frame_hashes": {
+      "path": "frame-hashes.txt",
+      "count": 3720,
+      "algorithm": "sha256",
+      "over": "raw RGB, 8 bits per channel, row by row, of the composited frame before encoding",
+      "root": "sha256:0f7633183a3103af337984497ef0a36e9c9f048428ec6dbdc93ec6e0f8885227"
+    },
+    "audio": null
+  },
+  "checks": {
+    "segments_under_20mb": true,
+    "files_under_100mb": true,
+    "frame_count_matches_duration": true
+  },
+  "publication": {
+    "canonical": "https://strataeditor.dev/video/short/v1/",
+    "source": {
+      "repo": "tejaswigowda/renders",
+      "tag": "short/v1",
+      "path": "short"
+    },
+    "mirrors": [
+      "https://cdn.jsdelivr.net/gh/tejaswigowda/renders@short/v1/short/",
+      "https://archive.org/download/strata-short-v1/"
+    ],
+    "target": "generic",
+    "constraints": {
+      "max_file_bytes": 20971520,
+      "target_segment_s": 6
+    },
+    "size_bytes": 47502149
+  }
+}

@@ -1,0 +1,868 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strataeditor.dev/schemas/render.schema.json",
+  "title": "render.json (Strata publish set, version 2)",
+  "type": "object",
+  "required": [
+    "version",
+    "scene",
+    "render",
+    "outputs",
+    "checks"
+  ],
+  "properties": {
+    "version": {
+      "const": 2
+    },
+    "scene": {
+      "type": "object",
+      "required": [
+        "repo",
+        "file",
+        "branch",
+        "commit",
+        "hash"
+      ],
+      "properties": {
+        "repo": {
+          "type": "string",
+          "pattern": "^[^/\\s]+/[^/\\s]+$"
+        },
+        "file": {
+          "type": "string",
+          "minLength": 1
+        },
+        "branch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "commit": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[0-9a-f]{7,40}$"
+        },
+        "hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      }
+    },
+    "render": {
+      "type": "object",
+      "required": [
+        "mode",
+        "renderer",
+        "device",
+        "fps",
+        "frames",
+        "frame_range",
+        "duration_s",
+        "width",
+        "height",
+        "seed",
+        "exporter",
+        "rendered_at",
+        "encoder",
+        "time_source_audit",
+        "determinism"
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "offline",
+            "realtime"
+          ]
+        },
+        "renderer": {
+          "type": "string"
+        },
+        "device": {
+          "type": "string"
+        },
+        "fps": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "frames": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "frame_range": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "duration_s": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "seed": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "exporter": {
+          "type": "string"
+        },
+        "rendered_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "time_source_audit": {
+          "type": "object",
+          "required": [
+            "document",
+            "passed",
+            "confirmed",
+            "live_when_present"
+          ],
+          "properties": {
+            "document": {
+              "type": "string"
+            },
+            "passed": {
+              "type": "boolean"
+            },
+            "confirmed": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "What the audit confirmed (no clock, no delta integration, no previous-frame reads, no Shell timer read by an animated quantity), with how in guides/TIME_SOURCES.md."
+            },
+            "live_when_present": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Live inputs that, when they apply to this render, make frames false."
+            }
+          }
+        },
+        "encoder": {
+          "type": "object",
+          "required": [
+            "kind",
+            "name",
+            "version",
+            "settings_hash",
+            "threads",
+            "config"
+          ],
+          "description": "The encoder of the MASTER: the mezzanine the ladder is transcoded from. It is not the encoder of the renditions (their bitrates are lower and their settings their own): each rendition records that in outputs.renditions[].encoder.",
+          "properties": {
+            "kind": {
+              "enum": [
+                "software",
+                "hardware"
+              ]
+            },
+            "name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "version": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "settings_hash": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            "threads": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "config": {
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "stage": {
+              "const": "master"
+            }
+          }
+        },
+        "determinism": {
+          "type": "object",
+          "required": [
+            "frames",
+            "bytes",
+            "reasons",
+            "verification"
+          ],
+          "description": "Two claims, each with its own reasons. frames: frame n is a pure function of n / fps and the pinned inputs; true only after a complete, passed shuffled-order test (every frame redrawn in an order no sequential render uses, each identical to the sequential one). bytes: the encoded file repeats byte for byte; true only when frames is true and the software encoder wrote it. A hardware encoder is a reason the bytes are not promised and is not a reason against the frames.",
+          "properties": {
+            "frames": {
+              "type": "boolean"
+            },
+            "bytes": {
+              "type": "boolean"
+            },
+            "reasons": {
+              "type": "object",
+              "required": [
+                "frames",
+                "bytes"
+              ],
+              "properties": {
+                "frames": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Empty when frames is true."
+                },
+                "bytes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Empty when bytes is true."
+                }
+              }
+            },
+            "verification": {
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "method",
+                    "every",
+                    "seed",
+                    "frames_checked",
+                    "of",
+                    "complete",
+                    "passed",
+                    "mismatched_frames",
+                    "mismatched_count"
+                  ],
+                  "properties": {
+                    "method": {
+                      "const": "shuffled-order"
+                    },
+                    "every": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "seed": {
+                      "type": "integer"
+                    },
+                    "frames_checked": {
+                      "type": "integer"
+                    },
+                    "of": {
+                      "type": "integer"
+                    },
+                    "complete": {
+                      "type": "boolean",
+                      "description": "True only when every frame was checked."
+                    },
+                    "passed": {
+                      "type": "boolean"
+                    },
+                    "mismatched_frames": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      }
+                    },
+                    "mismatched_count": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "required": [
+        "master",
+        "renditions",
+        "poster",
+        "captions",
+        "audio",
+        "caption_tracks"
+      ],
+      "properties": {
+        "master": {
+          "const": "master.m3u8"
+        },
+        "renditions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "width",
+              "height",
+              "bitrate_kbps",
+              "playlist",
+              "segments",
+              "max_segment_bytes"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "width": {
+                "type": "integer"
+              },
+              "height": {
+                "type": "integer"
+              },
+              "bitrate_kbps": {
+                "type": "number"
+              },
+              "playlist": {
+                "type": "string"
+              },
+              "segments": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "max_segment_bytes": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "encoder": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "description": "What the encoder that produced THIS rendition was given (size, bitrate, frame rate, keyframe interval), and that it was transcoded from the master. A recorded setting that does not match the rendition is refused at publish (checks.encoder_recorded_per_rendition).",
+                "properties": {
+                  "kind": {
+                    "enum": [
+                      "software",
+                      "hardware"
+                    ]
+                  },
+                  "stage": {
+                    "const": "ladder"
+                  },
+                  "input": {
+                    "const": "master"
+                  },
+                  "settings_hash": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  },
+                  "config": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "poster": {
+          "type": "string"
+        },
+        "captions": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The default caption track's path (the first of caption_tracks), or null. Kept so anything that reads it as a path still works."
+        },
+        "audio": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "description": "One AAC-LC audio rendition, referenced by every video rung through an HLS audio group.",
+          "required": [
+            "codec",
+            "playlist",
+            "segments",
+            "max_segment_bytes",
+            "duration_s",
+            "sample_rate",
+            "channels",
+            "bitrate_kbps",
+            "source"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "language": {
+              "type": "string"
+            },
+            "codec": {
+              "const": "mp4a.40.2"
+            },
+            "sample_rate": {
+              "type": "integer"
+            },
+            "channels": {
+              "type": "integer"
+            },
+            "bitrate_kbps": {
+              "type": "number"
+            },
+            "playlist": {
+              "type": "string"
+            },
+            "segments": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "max_segment_bytes": {
+              "type": "integer"
+            },
+            "duration_s": {
+              "type": "number"
+            },
+            "encoder_delay_samples": {
+              "type": "integer"
+            },
+            "source": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256"
+              ],
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^sha256:[0-9a-f]{64}$"
+                },
+                "tool": {
+                  "type": "string",
+                  "description": "Present when the narration was made by a tool (dub.webcli.app) rather than committed by hand."
+                },
+                "voice": {
+                  "type": "string"
+                },
+                "model": {
+                  "type": "string",
+                  "description": "The synthesis model and device the tool reported."
+                }
+              }
+            }
+          }
+        },
+        "file": {
+          "type": "object",
+          "description": "One MP4 with the video copied from the master, AAC audio and a soft caption track, made by ffmpeg.webcli.app. Optional.",
+          "required": [
+            "path",
+            "bytes",
+            "container",
+            "made_by"
+          ],
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "bytes": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "container": {
+              "const": "mp4"
+            },
+            "video": {
+              "type": "string"
+            },
+            "audio": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "captions": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "made_by": {
+              "type": "string"
+            },
+            "command": {
+              "type": "string"
+            }
+          }
+        },
+        "frame_hashes": {
+          "type": "object",
+          "required": [
+            "path",
+            "count",
+            "algorithm",
+            "root"
+          ],
+          "description": "The sha256 of every frame (raw RGB, before encoding): the sidecar and its root hash. Required for determinism.frames to be true.",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "count": {
+              "type": "integer"
+            },
+            "algorithm": {
+              "const": "sha256"
+            },
+            "over": {
+              "type": "string"
+            },
+            "root": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            }
+          }
+        },
+        "caption_tracks": {
+          "type": "array",
+          "description": "Every caption file of the render: its language, where it came from, and the hash of the cues it holds. Empty when there are no captions. A cue-derived track (source \"cues\") is a projection of the scene's cue list and cannot drift against the narration; an asr track is inferred and has no authored ids.",
+          "items": {
+            "type": "object",
+            "required": [
+              "path",
+              "language",
+              "source",
+              "cues_sha256",
+              "structure_sha256",
+              "cue_count",
+              "addressable"
+            ],
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "language": {
+                "type": "string"
+              },
+              "source": {
+                "enum": [
+                  "cues",
+                  "asr",
+                  "manual"
+                ],
+                "description": "cues: generated from the scene's cue list (exact). asr: transcribed from the audio (approximate). manual: written or edited by a person."
+              },
+              "cues_sha256": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "description": "Hash of the ids, times and words this file holds. For a cue-derived track it equals the hash of the scene's cues when the file was written."
+              },
+              "structure_sha256": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "description": "Hash of the ids and times only: what a translation shares with the cues it translates."
+              },
+              "cue_count": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "addressable": {
+                "type": "boolean",
+                "description": "True when every cue carries an authored id (the WebVTT cue identifier), so a player can seek to it and a link can name it."
+              },
+              "translation_of": {
+                "type": "string",
+                "description": "The language this track translates."
+              },
+              "translated_from": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "description": "The cues_sha256 of the cue list this translation was made from: when the scene's differs, the translation is stale."
+              },
+              "asr": {
+                "type": "object",
+                "required": [
+                  "model"
+                ],
+                "properties": {
+                  "model": {
+                    "type": "string"
+                  },
+                  "version": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                }
+              },
+              "hls": {
+                "type": "string",
+                "description": "The track's subtitle playlist in master.m3u8, when the render has one."
+              }
+            }
+          }
+        },
+        "manifest": {
+          "type": "object",
+          "required": [
+            "path",
+            "algorithm"
+          ],
+          "description": "files.sha256: the sha256 of every other file of the folder, in the format sha256sum -c reads. What a mirror or a storage sync is verified against.",
+          "properties": {
+            "path": {
+              "const": "files.sha256"
+            },
+            "algorithm": {
+              "const": "sha256"
+            }
+          }
+        },
+        "audio_present": {
+          "type": "boolean",
+          "description": "Whether the render has audio. false is a recorded fact: the master declares no audio group and no audio codec (checks.master_matches_audio)."
+        },
+        "audio_absence": {
+          "type": "string",
+          "description": "Present when audio_present is false: why."
+        }
+      }
+    },
+    "checks": {
+      "type": "object",
+      "required": [
+        "segments_under_20mb",
+        "files_under_100mb",
+        "frame_count_matches_duration"
+      ],
+      "properties": {
+        "segments_under_20mb": {
+          "type": "boolean"
+        },
+        "files_under_100mb": {
+          "type": "boolean"
+        },
+        "frame_count_matches_duration": {
+          "type": "boolean"
+        },
+        "audio_duration_matches_video": {
+          "type": "boolean",
+          "description": "Present when there is audio."
+        },
+        "encoder_recorded_per_rendition": {
+          "type": "boolean",
+          "description": "Every rendition records an encoder whose size, bitrate and frame rate are the rendition's own."
+        },
+        "master_matches_audio": {
+          "type": "boolean",
+          "description": "The master playlist agrees with whether the render has audio: no audio group or mp4a codec without audio, and the group, the codec and the reference all present with it."
+        }
+      }
+    },
+    "publication": {
+      "oneOf": [
+        {
+          "type": "object",
+          "description": "Where this render lives. The address it is shared at names no provider; the source of truth is a tag of a repository; every other copy is a mirror. Optional: a render.json without it was published into the scene repo (renders/<scene>/) before renders had a repository of their own, and is read as storage source-repo, pinned by the commit it is found at.",
+          "required": [
+            "canonical",
+            "source",
+            "mirrors",
+            "target",
+            "constraints",
+            "size_bytes"
+          ],
+          "properties": {
+            "canonical": {
+              "type": "string",
+              "pattern": "^https://[^/\\s]+/video/.+/v[1-9][0-9]*/$",
+              "description": "https://<host>/video/<slug>/v<N>/. The first place a player looks. The path is the tag, so it is pinned by construction."
+            },
+            "source": {
+              "type": "object",
+              "required": [
+                "repo",
+                "tag",
+                "path"
+              ],
+              "description": "The source of truth: the folder <path>/ of <repo> at <tag>. Tags are never moved.",
+              "properties": {
+                "repo": {
+                  "type": "string",
+                  "pattern": "^[^/\\s]+/[^/\\s]+$"
+                },
+                "tag": {
+                  "type": "string",
+                  "description": "<path>/v<N>"
+                },
+                "path": {
+                  "type": "string"
+                }
+              }
+            },
+            "mirrors": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^https://[^/\\s]+/.*/$"
+              },
+              "description": "Every other place that holds the same bytes, in the order a player tries them. Each can be checked against files.sha256."
+            },
+            "target": {
+              "type": "string",
+              "description": "What the ladder was shaped for ('generic')."
+            },
+            "constraints": {
+              "type": "object",
+              "required": [
+                "max_file_bytes",
+                "target_segment_s"
+              ],
+              "description": "The limits that shaped the ladder, recorded as a deployment decision rather than left to read as a fact about HLS.",
+              "properties": {
+                "max_file_bytes": {
+                  "type": "integer"
+                },
+                "target_segment_s": {
+                  "type": "number"
+                }
+              }
+            },
+            "size_bytes": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "description": "Every file of the folder except render.json and files.sha256."
+            }
+          }
+        },
+        {
+          "type": "object",
+          "description": "Legacy shape (published before the canonical address existed, or into the scene repo). Where this render lives: still served where it is, and listed as the one mirror by readers.",
+          "required": [
+            "storage",
+            "repo",
+            "path",
+            "tag",
+            "url",
+            "size_bytes"
+          ],
+          "properties": {
+            "storage": {
+              "enum": [
+                "renders-repo",
+                "source-repo"
+              ],
+              "description": "renders-repo: a repository of its own, one folder per scene, one immutable tag per version. source-repo: the legacy layout in the scene's repository."
+            },
+            "repo": {
+              "type": "string",
+              "pattern": "^[^/\\s]+/[^/\\s]+$",
+              "description": "owner/name of the repository holding these files."
+            },
+            "path": {
+              "type": "string",
+              "description": "The folder in that repository: the scene's slug (renders-repo) or renders/<scene> (source-repo)."
+            },
+            "tag": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "<path>/v<N>. Never moved once published; a re-render is the next version. Null for source-repo."
+            },
+            "url": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "The pinned base address of this render (jsDelivr, @<tag>). Never @latest or a branch. Null for source-repo, whose address is pinned by commit."
+            },
+            "size_bytes": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "description": "Every file of the folder except render.json itself."
+            }
+          }
+        }
+      ]
+    },
+    "inputs": {
+      "type": "object",
+      "description": "Inputs the frames were made from that are not the scene.",
+      "properties": {
+        "end_card": {
+          "type": "object",
+          "required": [
+            "path",
+            "sha256",
+            "bytes"
+          ],
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            "bytes": {
+              "type": "integer"
+            },
+            "source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "stamp": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "What the live page said when it was baked (its version stamp)."
+            },
+            "width": {
+              "type": "integer"
+            },
+            "height": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    }
+  }
+}

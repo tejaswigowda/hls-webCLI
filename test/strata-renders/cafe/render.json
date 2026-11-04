@@ -1,0 +1,152 @@
+{
+  "version": 2,
+  "scene": {
+    "repo": "tejaswigowda/test1",
+    "file": "cafe.json",
+    "branch": "main",
+    "commit": "e9235f055afde31705a196bc9b96141188029fb1",
+    "hash": "sha256:72e31ceccb1906d310aabe2efd98a21eea18b60daf76d7d9c9e7cffb4be1d447"
+  },
+  "render": {
+    "mode": "offline",
+    "determinism": {
+      "frames": false,
+      "bytes": false,
+      "reasons": {
+        "frames": [
+          "not verified: the shuffled-order test was not run (set Verify to all frames)"
+        ],
+        "bytes": [
+          "a hardware encoder was chosen: its bytes are not promised to repeat (a choice; the frames are unaffected)",
+          "the frames are not established as deterministic"
+        ]
+      },
+      "verification": null
+    },
+    "encoder": {
+      "kind": "hardware",
+      "name": "WebCodecs VideoEncoder (H.264)",
+      "version": "Google Chrome 159",
+      "settings_hash": "sha256:95b17ad03ad20b6579e31b6c628b540f267c3d62411e7a784dfd98ea7f8142a2",
+      "threads": null,
+      "config": {
+        "codec": "avc1.64002a",
+        "width": 1920,
+        "height": 1080,
+        "bitrate": 18662400,
+        "framerate": 60,
+        "avc": {
+          "format": "avc"
+        },
+        "latencyMode": "quality",
+        "hardwareAcceleration": "no-preference",
+        "keyEvery": 120
+      }
+    },
+    "renderer": "WebGLRenderer",
+    "device": "webgl2",
+    "fps": 60,
+    "frames": 9510,
+    "frame_range": [
+      0,
+      9509
+    ],
+    "duration_s": 158.5,
+    "width": 1920,
+    "height": 1080,
+    "seed": null,
+    "exporter": "strata-export/1.2.0",
+    "rendered_at": "2026-11-03T17:37:05.788Z",
+    "time_source_audit": {
+      "document": "guides/TIME_SOURCES.md",
+      "passed": true,
+      "confirmed": [
+        "no-clock-in-animated-quantities",
+        "no-delta-integration",
+        "no-previous-frame-reads",
+        "shell-wall-clock-loops"
+      ],
+      "live_when_present": [
+        "playback-running"
+      ]
+    }
+  },
+  "inputs": {
+    "end_card": {
+      "path": "endcard.png",
+      "sha256": "sha256:af291b8b569e7db5fa8830ac5c1f455879012c955d637ba8ad830f5bb6b29a29",
+      "bytes": 44450,
+      "source": "http://localhost:5503/docs/about/callcard/",
+      "stamp": "Strata v0.1.0",
+      "width": 576,
+      "height": 1024
+    }
+  },
+  "outputs": {
+    "master": "master.m3u8",
+    "renditions": [
+      {
+        "name": "1080p60",
+        "width": 1920,
+        "height": 1080,
+        "bitrate_kbps": 3500,
+        "playlist": "1080p60/index.m3u8",
+        "segments": 27,
+        "max_segment_bytes": 2834219
+      },
+      {
+        "name": "720p60",
+        "width": 1280,
+        "height": 720,
+        "bitrate_kbps": 1800,
+        "playlist": "720p60/index.m3u8",
+        "segments": 27,
+        "max_segment_bytes": 1483288
+      },
+      {
+        "name": "480p60",
+        "width": 854,
+        "height": 480,
+        "bitrate_kbps": 900,
+        "playlist": "480p60/index.m3u8",
+        "segments": 27,
+        "max_segment_bytes": 916791
+      }
+    ],
+    "poster": "poster.jpg",
+    "captions": "captions.vtt",
+    "caption_tracks": [
+      {
+        "path": "captions.vtt",
+        "language": "en",
+        "source": "cues",
+        "cues_sha256": "sha256:26400cb700be4698e168f1261ea4964c05256a629b685e0035eb86f1dc085887",
+        "structure_sha256": "sha256:defe0fe9e6730e182034fd0177780cb0513816e4f88f2377a06f4837d794ac98",
+        "cue_count": 24,
+        "addressable": true,
+        "hls": "subs/en/index.m3u8"
+      }
+    ],
+    "frame_hashes": {
+      "path": "frame-hashes.txt",
+      "count": 9510,
+      "algorithm": "sha256",
+      "over": "raw RGB, 8 bits per channel, row by row, of the composited frame before encoding",
+      "root": "sha256:fca29e2d671e1906e652093d9704b6d89cec7808c9e3448d98bbd0c1edbbd829"
+    },
+    "audio": null
+  },
+  "checks": {
+    "segments_under_20mb": true,
+    "files_under_100mb": true,
+    "frame_count_matches_duration": true
+  },
+  "publication": {
+    "storage": "renders-repo",
+    "repo": "tejaswigowda/renders",
+    "path": "cafe",
+    "tag": "cafe/v1",
+    "url": "https://cdn.jsdelivr.net/gh/tejaswigowda/renders@cafe/v1/cafe/",
+    "size_bytes": 122569327
+  }
+}

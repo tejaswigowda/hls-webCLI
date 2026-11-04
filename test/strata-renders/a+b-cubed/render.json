@@ -1,0 +1,172 @@
+{
+  "version": 2,
+  "scene": {
+    "repo": "tejaswigowda/test1",
+    "file": "a+b-cubed.json",
+    "branch": "main",
+    "commit": "e9235f055afde31705a196bc9b96141188029fb1",
+    "hash": "sha256:09fa6bd7183d3e1c5fea8f1f8c6453e48d5b06b41c7270d1e373b8dcff1304d4"
+  },
+  "render": {
+    "mode": "offline",
+    "determinism": {
+      "frames": false,
+      "bytes": false,
+      "reasons": {
+        "frames": [
+          "not verified: the shuffled-order test was not run (set Verify to all frames)"
+        ],
+        "bytes": [
+          "a hardware encoder was chosen: its bytes are not promised to repeat (a choice; the frames are unaffected)",
+          "the frames are not established as deterministic"
+        ]
+      },
+      "verification": null
+    },
+    "encoder": {
+      "kind": "hardware",
+      "name": "WebCodecs VideoEncoder (H.264)",
+      "version": "Google Chrome 159",
+      "settings_hash": "sha256:95b17ad03ad20b6579e31b6c628b540f267c3d62411e7a784dfd98ea7f8142a2",
+      "threads": null,
+      "config": {
+        "codec": "avc1.64002a",
+        "width": 1920,
+        "height": 1080,
+        "bitrate": 18662400,
+        "framerate": 60,
+        "avc": {
+          "format": "avc"
+        },
+        "latencyMode": "quality",
+        "hardwareAcceleration": "no-preference",
+        "keyEvery": 120
+      }
+    },
+    "renderer": "WebGLRenderer",
+    "device": "webgl2",
+    "fps": 60,
+    "frames": 3809,
+    "frame_range": [
+      0,
+      3808
+    ],
+    "duration_s": 63.483333,
+    "width": 1920,
+    "height": 1080,
+    "seed": null,
+    "exporter": "strata-export/1.2.0",
+    "rendered_at": "2026-11-04T00:06:05.205Z",
+    "time_source_audit": {
+      "document": "guides/TIME_SOURCES.md",
+      "passed": true,
+      "confirmed": [
+        "no-clock-in-animated-quantities",
+        "no-delta-integration",
+        "no-previous-frame-reads",
+        "shell-wall-clock-loops"
+      ],
+      "live_when_present": [
+        "playback-running"
+      ]
+    }
+  },
+  "inputs": {
+    "end_card": {
+      "path": "endcard.png",
+      "sha256": "sha256:ad9bca8c0bdc6da2a759ac8345ee6dc58f318bbb29d54503fe0fae2bf66cfd2e",
+      "bytes": 89594,
+      "source": "http://localhost:5503/docs/about/callcard/",
+      "stamp": "Strata v0.1.0",
+      "width": 2048,
+      "height": 1152
+    }
+  },
+  "outputs": {
+    "master": "master.m3u8",
+    "renditions": [
+      {
+        "name": "1080p60",
+        "width": 1920,
+        "height": 1080,
+        "bitrate_kbps": 3500,
+        "playlist": "1080p60/index.m3u8",
+        "segments": 11,
+        "max_segment_bytes": 2677342
+      },
+      {
+        "name": "720p60",
+        "width": 1280,
+        "height": 720,
+        "bitrate_kbps": 1800,
+        "playlist": "720p60/index.m3u8",
+        "segments": 11,
+        "max_segment_bytes": 1370622
+      },
+      {
+        "name": "480p60",
+        "width": 854,
+        "height": 480,
+        "bitrate_kbps": 900,
+        "playlist": "480p60/index.m3u8",
+        "segments": 11,
+        "max_segment_bytes": 692112
+      }
+    ],
+    "poster": "poster.jpg",
+    "captions": "captions.vtt",
+    "caption_tracks": [
+      {
+        "path": "captions.vtt",
+        "language": "en",
+        "source": "cues",
+        "cues_sha256": "sha256:d472366a010472578cc7fc7aa0c8dae5895890b13ecedec0ae2d63a076d05423",
+        "structure_sha256": "sha256:54c94fad3140596c6b95892763a5da9a74d708834d2c6332c1446d7c8db5c0e1",
+        "cue_count": 10,
+        "addressable": true,
+        "hls": "subs/en/index.m3u8"
+      }
+    ],
+    "frame_hashes": {
+      "path": "frame-hashes.txt",
+      "count": 3809,
+      "algorithm": "sha256",
+      "over": "raw RGB, 8 bits per channel, row by row, of the composited frame before encoding",
+      "root": "sha256:31c78292dbf23e22dc8a5e6e8c8ae9cdd809116482737e50f822ac0555364b4f"
+    },
+    "audio": {
+      "name": "English",
+      "language": "en",
+      "codec": "mp4a.40.2",
+      "sample_rate": 48000,
+      "channels": 2,
+      "bitrate_kbps": 128,
+      "playlist": "audio/index.m3u8",
+      "segments": 11,
+      "max_segment_bytes": 59060,
+      "duration_s": 63.488,
+      "source": {
+        "path": "narration.wav",
+        "sha256": "sha256:1d51c01ca139d59cd34da31a2cad08c04658a290c2f40bdbac5268d4807df434",
+        "tool": "dub.webcli.app",
+        "voice": "af_heart",
+        "model": "onnx-community/Kokoro-82M-v1.0-ONNX@1939ad2a8e416c0acfeecc08a694d14ef25f2231 q8/wasm"
+      },
+      "encoder_delay_samples": 2112
+    }
+  },
+  "checks": {
+    "segments_under_20mb": true,
+    "files_under_100mb": true,
+    "frame_count_matches_duration": true,
+    "audio_duration_matches_video": true
+  },
+  "publication": {
+    "storage": "renders-repo",
+    "repo": "tejaswigowda/renders",
+    "path": "a+b-cubed",
+    "tag": "a+b-cubed/v1",
+    "url": "https://cdn.jsdelivr.net/gh/tejaswigowda/renders@a+b-cubed/v1/a+b-cubed/",
+    "size_bytes": 50610330
+  }
+}
