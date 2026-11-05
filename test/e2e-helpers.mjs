@@ -16,7 +16,7 @@ export async function startApp( t ) {
 	const gh = new MockGitHub( { owner: 'me', repo: 'renders' } );
 	const browser = await chromium.launch( { executablePath: CHROME, headless: true } );
 	t.after( () => browser.close() );
-	const page = await ( await browser.newContext() ).newPage();
+	const page = await ( await browser.newContext( { permissions: [ 'clipboard-read', 'clipboard-write' ] } ) ).newPage();
 	const outside = [];
 	page.on( 'console', m => { if ( m.type() === 'error' ) console.log( 'console.error:', m.text() ); } );
 	page.on( 'pageerror', e => console.log( 'pageerror:', e.message ) );

@@ -114,6 +114,18 @@ function libraryTable( lib ) {
 		const has = [ s.rungs.join(' '), s.hasAudio && 'audio', s.hasCaptions && 'captions', s.hasPoster && 'poster', s.hasManifest ? 'files.sha256' : 'no files.sha256' ].filter( Boolean ).join( ' \u00b7 ' );
 		const actions = el( 'td' );
 		if ( s.player ) actions.append( link( s.player, 'Play' ), ' ' );
+		if ( s.embed ) {
+
+			const copy = el( 'button', { type: 'button', text: 'Copy embed link', title: 'The play address with &present=true: the video only, filling the window or an <iframe>' } );
+			copy.onclick = async () => {
+
+				try { await navigator.clipboard.writeText( s.embed ); copy.textContent = 'Copied'; } catch ( e ) { window.prompt( 'Copy this embed link:', s.embed ); }
+				setTimeout( () => { copy.textContent = 'Copy embed link'; }, 1500 );
+
+			};
+			actions.append( copy, ' ' );
+
+		}
 		if ( s.base ) {
 
 			const verify = el( 'button', { type: 'button', text: 'Verify' } );

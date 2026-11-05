@@ -77,6 +77,8 @@ test( 'upload, prepare, publish and list in a real browser', { skip, timeout: 24
 	await page.waitForSelector( '#library-result table' );
 	const row = await page.textContent( '#library-result tbody tr' );
 	assert.match( row, /my-clip/ ); assert.match( row, /current/ ); assert.match( row, /v1/ );
+	await page.click( '#library-result button:has-text("Copy embed link")' );
+	assert.match( await page.evaluate( () => navigator.clipboard.readText() ), /#https:\/\/cdn\.jsdelivr\.net\/gh\/me\/renders@my-clip\/v1\/my-clip\/&present=true$/ );
 	await page.click( '#library-result button:has-text("Verify")' );
 	await page.waitForFunction( () => /locations verified/.test( document.querySelector( '.verdicts' ).textContent ), null, { timeout: 60000 } );
 	assert.match( await page.textContent( '.verdicts' ), /1 of 1 locations verified/ );

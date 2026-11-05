@@ -170,6 +170,8 @@ test( 'a second publish is the next version; the old tag stays; the Library list
 	assert.equal( s.nextVersion, 3 );
 	assert.deepEqual( s.rungs.length > 0, true ); assert.equal( s.hasManifest, true ); assert.equal( s.hasPoster, true );
 	assert.match( s.base, /@my-clip\/v2\/my-clip\/$/ );
+	assert.equal( s.embed, s.player + '&present=true' );
+	assert.match( s.embed, /\/player\/#https:\/\/cdn\.jsdelivr\.net\/gh\/me\/renders@my-clip\/v2\/my-clip\/&present=true$/ );
 
 } );
 

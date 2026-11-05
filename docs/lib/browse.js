@@ -118,7 +118,7 @@ export async function listStreams( api, { owner, repo, ref = null, playerRoot = 
 		else { const p = parseTag( s.serving ); s.state = p && p.version > latest.version ? 'ahead' : 'behind'; }
 		const pin = s.serving && isPinnedRef( s.serving ) ? s.serving : s.latest;
 		// a share link must be pinned to a tag: a stream with no tag has no address that stays the same
-		if ( pin && s.slug ) { s.base = releaseBase( { repo: full, tag: pin, slug: s.slug } ); s.player = playerLink( playerRoot, s.base ); }
+		if ( pin && s.slug ) { s.base = releaseBase( { repo: full, tag: pin, slug: s.slug } ); s.player = playerLink( playerRoot, s.base ); s.embed = s.player + '&present=true'; }
 		s.nextVersion = s.slug ? nextVersion( names, s.slug ) : null;
 
 	}
